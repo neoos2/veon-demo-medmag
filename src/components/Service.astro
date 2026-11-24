@@ -1,0 +1,36 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { mainPhone } from "../data/site";
+---
+<Section id="service" class="section service">
+  <div class="container service__in">
+    <div class="service__text">
+      <span class="service__icon" aria-hidden="true"><Icon name="wrench" size={32} /></span>
+      <h2>Ремонт тонометрів та інгаляторів</h2>
+      <p class="lead">Зламався прилад — подзвоніть, щоб дізнатися умови ремонту.</p>
+    </div>
+    <div class="service__actions">
+        <a class="btn btn--primary num" href={mainPhone.href}><Icon name="phone" size={20} />Подзвонити {mainPhone.short}</a>
+        <FutureLink class="service__more arrow">Ремонт і сервіс <Icon name="arrow" size={20} /></FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(section.service) { border-top: var(--line) solid var(--color-line); }
+  .service__in { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: end; }
+  .service__text { grid-column: 1 / span 7; display: grid; gap: var(--s-2); justify-items: start; }
+  .service__icon { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: var(--radius); background: var(--color-surface); color: var(--color-accent); margin-bottom: var(--s-1); }
+  .service__actions { grid-column: 9 / span 4; display: grid; gap: var(--s-2); justify-items: start; }
+  .service__actions .btn { white-space: nowrap; }
+  .service__actions :global(.service__more) { min-height: var(--tap); color: var(--color-accent); }
+  @media (max-width: 1023.98px) {
+    .service__text, .service__actions { grid-column: 1 / -1; }
+    .service__actions { margin-top: var(--s-2); }
+  }
+  @media (max-width: 559.98px) {
+    .service__actions, .service__actions .btn { width: 100%; }
+  }
+</style>

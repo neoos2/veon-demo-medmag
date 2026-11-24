@@ -1,0 +1,123 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { saleGroups, uah, discount, mainPhone, contacts } from "../data/site";
+---
+<Section id="sale" rec="R-UX-04" class="section sale">
+  <div class="container">
+    <div class="section__head">
+      <h2>Товари зі знижкою</h2>
+      <p class="lead">Лише медична техніка, згрупована за напрямами.</p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Напрями знижок" hidden data-tabs>
+      {saleGroups.map((g, i) => (
+        <button class="tab" type="button" role="tab" id={`tab-${g.id}`} aria-controls={`panel-${g.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>
+          {g.tab} <span class="tab__n num">{g.items.length}</span>
+        </button>
+      ))}
+      <span class="tabs__marker" aria-hidden="true"></span>
+    </div>
+
+    <div class="panels">
+      {saleGroups.map((g, i) => (
+        <section class:list={["sale__panel", { "is-on": i === 0 }]} id={`panel-${g.id}`} role="tabpanel" aria-labelledby={`tab-${g.id}`}>
+          <h3 class="panel__title">{g.tab}</h3>
+          <ul class="tags">
+            {g.items.map((it) => (
+              <li class="tag">
+                <p class="tag__name">{it.name}</p>
+                <p class="tag__prices">
+                  <span class="visually-hidden">Стара ціна </span><s class="tag__old num">{uah(it.old)}</s>
+                  <span class="visually-hidden">, нова ціна </span><span class="tag__new num">{uah(it.price)}</span>
+                  <span class="tag__off num">−{discount(it)}&nbsp;%</span>
+                </p>
+                <FutureLink class="tag__go arrow" align="end">До товару <Icon name="arrow" size={20} /></FutureLink>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+
+    <p class="sale__note">
+      Ціни станом на 05.10.2026. Наявність і замовлення — <a class="link" href={mainPhone.href}>телефоном {mainPhone.short}</a>, у <a class="link" href={contacts.viber}>Viber</a> або <a class="link" href={contacts.telegram}>Telegram</a>.
+    </p>
+  </div>
+</Section>
+
+<script>
+  const list = document.querySelector<HTMLElement>("[data-tabs]");
+  if (list) {
+    list.hidden = false;
+    document.documentElement.classList.add("tabs-ready");
+    const tabs = [...list.querySelectorAll<HTMLButtonElement>("[role=tab]")];
+    const marker = list.querySelector<HTMLElement>(".tabs__marker");
+    const place = (t: HTMLElement) => {
+      if (marker) marker.style.transform = `translateX(${t.offsetLeft}px) scaleX(${t.offsetWidth / 100})`;
+    };
+    const select = (t: HTMLButtonElement, focus = false) => {
+      tabs.forEach((x) => {
+        const on = x === t;
+        x.setAttribute("aria-selected", String(on));
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute("aria-controls") || "")?.classList.toggle("is-on", on);
+      });
+      place(t);
+      if (focus) { t.focus(); t.scrollIntoView({ block: "nearest", inline: "nearest" }); }
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", (e) => {
+        const k = e.key;
+        let n = -1;
+        if (k === "ArrowRight") n = (i + 1) % tabs.length;
+        if (k === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
+        if (k === "Home") n = 0;
+        if (k === "End") n = tabs.length - 1;
+        if (n >= 0) { e.preventDefault(); select(tabs[n], true); }
+      });
+    });
+    const cur = () => tabs.find((t) => t.getAttribute("aria-selected") === "true") || tabs[0];
+    place(cur());
+    new ResizeObserver(() => place(cur())).observe(list);
+  }
+</script>
+
+<style>
+  .tabs { position: relative; display: flex; gap: var(--s-1); overflow-x: auto; scrollbar-width: none; margin-bottom: var(--s-4); border-bottom: var(--line) solid var(--color-line); }
+  .tabs[hidden] { display: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: none; display: inline-flex; align-items: center; gap: var(--s-1); min-height: 52px; padding: 0 var(--s-2); border: 0; background: transparent; font: 600 1rem/1.2 var(--font-body); color: var(--color-muted); cursor: pointer; border-radius: var(--radius) var(--radius) 0 0; transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out); }
+  .tab:hover { color: var(--color-text); background: var(--color-surface); }
+  .tab[aria-selected="true"] { color: var(--color-text); }
+  .tab:focus-visible { outline-offset: -2px; }
+  .tab__n { font-size: 0.8125rem; color: var(--color-muted); }
+  .tabs__marker { position: absolute; left: 0; bottom: 0; width: 100px; height: 4px; background: var(--color-marker); transform-origin: left; transition: transform var(--dur-mid) var(--ease-out); pointer-events: none; }
+
+  .panels { display: grid; }
+  .sale__panel { display: grid; gap: var(--s-2); }
+  .panel__title { font-size: var(--fs-h3); margin-top: var(--s-4); }
+  .sale__panel:first-child .panel__title { margin-top: 0; }
+
+  .tags { list-style: none; margin: 0; padding: 0; display: grid; border-top: var(--ring) solid var(--color-text); }
+  .tag { display: grid; grid-template-columns: minmax(0, 1fr) auto 8.5rem; gap: var(--s-4); align-items: center; padding-block: var(--s-3); border-bottom: var(--line) solid var(--color-line); }
+  .tag__name { font-size: var(--fs-lead); font-weight: 600; line-height: 1.35; max-width: 34em; }
+  .tag__prices { display: flex; align-items: baseline; gap: var(--s-2); white-space: nowrap; }
+  .tag__old { color: var(--color-muted); font-size: var(--fs-body); }
+  .tag__new { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-price); line-height: 1.3; padding: 8px 16px; background: var(--color-marker); color: var(--color-text); }
+  .tag__off { font-weight: 600; font-size: var(--fs-small); color: var(--color-text); border: var(--line) solid var(--color-text); border-radius: var(--radius); padding: 4px 8px; }
+  .tag :global(.tag__go) { justify-self: end; min-height: var(--tap); color: var(--color-accent); }
+  .sale__note { margin-top: var(--s-4); color: var(--color-muted); max-width: 46rem; }
+
+  @media (max-width: 767.98px) {
+    .tags { border-top-width: var(--line); }
+    .tag { grid-template-columns: minmax(0, 1fr); gap: var(--s-1); padding-block: var(--s-3); }
+    .tag__prices { flex-wrap: wrap; }
+    .tag :global(.tag__go) { justify-self: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tabs__marker { transition: none; }
+  }
+</style>

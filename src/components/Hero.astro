@@ -1,0 +1,119 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { plusRow } from "../data/site";
+const H1 = "Медтехніка для всієї родини — магазин у Києві та доставка по Україні";
+const withImg = plusRow.filter((p) => p.img);
+---
+<Section id="hero" rec="R-UX-03,GA-R006,MA-R009" class="hero">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <h1 data-rec="SE-R001">{H1}</h1>
+      <ul class="hero__facts">
+        <li>Фірмовий магазин біля метро Мінська, вихід&nbsp;7</li>
+        <li>Безкоштовна доставка від 3&nbsp;000&nbsp;грн</li>
+        <li><span class="num">452</span> категорії, <span class="num">14&nbsp;882</span> товари</li>
+      </ul>
+      <div class="hero__actions" data-hero-actions>
+        <a class="btn btn--ink" href="#catalog">Перейти до каталогу</a>
+        <a class="btn btn--line" href="#consult">Порадитися</a>
+      </div>
+    </div>
+
+    <figure class="showcase" aria-hidden="true">
+      <div class="showcase__win">
+        {withImg.map((p, i) => (
+          <img class:list={["showcase__img", { "is-on": i === 0 }]} data-name={p.name} src={p.img} width="235" height="188" alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+        ))}
+        <span class="showcase__word"></span>
+      </div>
+      <figcaption class="showcase__cap">{withImg[0].name}</figcaption>
+    </figure>
+
+    <ul class="plus" aria-label="Популярні категорії">
+      {plusRow.map((p, i) => (
+        <li style={`--i:${i}`}>
+          <FutureLink class="plus__link" data-name={p.name}>{p.name}</FutureLink>
+          {i < plusRow.length - 1 && <span class="plus__sep" aria-hidden="true">+</span>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<script>
+  // Signature: the hovered / focused category word gets its photo in the showcase (≥ 1024 px with a pointer).
+  const fig = document.querySelector<HTMLElement>(".showcase");
+  const mq = window.matchMedia("(min-width: 1024px)");
+  if (fig) {
+    const imgs = [...fig.querySelectorAll<HTMLImageElement>(".showcase__img")];
+    const word = fig.querySelector<HTMLElement>(".showcase__word");
+    const cap = fig.querySelector<HTMLElement>(".showcase__cap");
+    const show = (name: string) => {
+      const hit = imgs.find((im) => im.dataset.name === name);
+      imgs.forEach((im) => im.classList.toggle("is-on", im === hit));
+      fig.classList.toggle("is-word", !hit);
+      if (word) word.textContent = hit ? "" : name;
+      if (cap) cap.textContent = name;
+    };
+    document.querySelectorAll<HTMLElement>(".plus__link").forEach((el) => {
+      const on = () => { if (mq.matches && el.dataset.name) show(el.dataset.name); };
+      el.addEventListener("mouseenter", on);
+      el.addEventListener("focus", on);
+    });
+  }
+</script>
+
+<style>
+  :global(section.hero) { background: var(--color-brand); color: var(--color-text); padding-block: var(--s-6); }
+  .hero__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--s-5); align-items: start; }
+  .hero__text { grid-column: 1 / span 8; display: grid; gap: var(--s-3); }
+  h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); letter-spacing: -0.015em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+  .hero__facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: var(--fs-lead); line-height: 1.45; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-1); }
+
+  .showcase { grid-column: 10 / span 3; margin: 0; display: grid; gap: var(--s-1); justify-self: start; align-self: center; width: 100%; max-width: 235px; }
+  .showcase__win { position: relative; background: var(--color-bg); aspect-ratio: 235 / 188; display: grid; place-items: center; overflow: hidden; }
+  .showcase__img { grid-area: 1 / 1; width: 100%; height: auto; transition: opacity var(--dur-mid) var(--ease-out), transform var(--dur-mid) var(--ease-out); }
+  .showcase__word { grid-area: 1 / 1; padding: var(--s-2); font-family: var(--font-display); font-weight: 600; font-size: 1.375rem; line-height: 1.2; text-align: center; color: var(--color-accent); opacity: 0; transition: opacity var(--dur-mid) var(--ease-out); }
+  .showcase.is-word .showcase__word { opacity: 1; }
+  .showcase__cap { font-size: var(--fs-small); font-weight: 600; }
+
+  .plus { grid-column: 1 / span 11; list-style: none; margin: 0; padding: 0; font-family: var(--font-display); font-weight: 400; font-size: var(--fs-plus); line-height: 1.35; color: var(--color-accent-ink); }
+  .plus { display: flex; flex-wrap: wrap; align-items: baseline; }
+  .plus li { display: inline-flex; align-items: baseline; max-width: 100%; }
+  .plus :global(.plus__link) { display: inline-block; position: relative; color: var(--color-accent-ink); text-decoration: none; }
+  .plus :global(.plus__link:hover), .plus :global(.plus__link:focus-visible) { text-decoration: none; }
+  .plus :global(.plus__link::after) { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform var(--dur-fast) var(--ease-out); }
+  .plus :global(.plus__link:hover::after), .plus :global(.plus__link:focus-visible::after) { transform: scaleX(1); }
+  .plus__sep { color: var(--color-text); font-weight: 600; margin-inline: 0.32em; }
+
+  /* Motion 1: the plus-row assembles word by word, H1 and facts are not animated */
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes word-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  :global(.js) .plus li { animation: word-in var(--dur-word) var(--ease-out) both; animation-delay: calc(var(--i) * 20ms); }
+
+  @media (max-width: 1023.98px) {
+    .showcase { display: none; }
+    .hero__text { grid-column: 1 / -1; }
+    .plus { grid-column: 1 / -1; }
+  }
+  @media (max-width: 767.98px) {
+    :global(section.hero) { padding-block: var(--s-4) var(--s-5); }
+    .hero__grid { row-gap: var(--s-4); }
+    .hero__text { gap: var(--s-2); }
+    .hero__facts { font-size: var(--fs-body); }
+    .hero__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: var(--s-2); }
+    .hero__actions .btn { width: 100%; }
+    .plus { display: block; font-size: 1.1875rem; font-weight: 600; line-height: 2.4; letter-spacing: -0.01em; }
+    .plus li { display: inline; }
+    .plus :global(.plus__link) { display: inline; padding-block: 12px; }
+    .plus :global(.plus__link::after) { bottom: 6px; }
+    .plus__sep { margin-inline: 0.1em; }
+    :global(.js) .plus li { animation: fade-in 300ms var(--ease-out) both; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .plus li { animation: none; }
+    .showcase__img, .showcase__word, .plus :global(.plus__link::after) { transition: none; }
+  }
+</style>

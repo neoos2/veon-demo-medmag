@@ -1,0 +1,81 @@
+/* Hallmark · shape: store index · genre: editorial · theme: custom · job: buy · idea: "Увесь магазин — одним реченням: каталог MEDMAG набрано великим текстом через фірмовий плюс на полі фірмового синього" · vibe: "clear, sure, family shop, brand blue, typographic"
+ * paper: #FFFFFF · surface: absolute · accent: #2E55A3 · display: Unbounded · body: Wix Madefor Text · hero: full-bleed brand-blue field, ink H1, three short facts, two actions, then the catalog as one plus-joined sentence with a photo showcase · nav: white sticky single row with open phone and messengers; 390 burger plus sticky bottom action bar · footer: white, logo, service links, schedule, socials, honest rating caption · imagery: client photos · signature: plus-row — the whole catalogue as one sentence; the hovered word gets its photo
+ * axes: white+brand-blue/Unbounded/#2E55A3 · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V4 · weakest: P, client photos are only 235 px tiles; kept them at 1x on white, the page is carried by type and the brand field */
+/* Hallmark · waive 7b · tokens.css --color-bg #FFFFFF · concept.md fixes pure white as the paper: the client's 235 px product tiles are JPEG on #FFFFFF, a tinted paper would show their edges */
+/* Hallmark · waive 44c · hero ends below the fold at 1440 · concept.md §8 «Композиція першого екрана»: the plus-row sentence intentionally continues right under the fold; H1, facts and both actions stay in the first screen */
+/* Hallmark · waive 39b · buttons stand 56 px · concept.md «Кнопки»: primary actions are 56 px tall so the call and catalog buttons are easy to hit for older buyers on a phone */
+/* Hallmark · waive 78 · section heads at 40 px under a 60 px hero head · concept.md scale fixes H2 40/26 so the plus-row sentence and the consult number stay the loudest type on the page */
+/* Hallmark · dismissed 28a · the catalog, repair and footer images sit far below the fold; the LCP is the hero H1 text, the hero photo is eager */
+/* Hallmark · answered F4 · two filled recipes by field: accent fill on white, ink fill on the brand-blue fields, as concept.md «Кнопки» sets */
+/* Hallmark · answered F20 · the consult row is two messenger buttons plus the opening hours, not three equal items */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md); waivers go right below it. */
+/* MEDMAG tokens — only from design/concept.md (veon-concept: colors, fonts). */
+:root {
+  /* colour roles */
+  --color-bg: #FFFFFF;
+  --color-surface: #EEF2FA;
+  --color-text: #101935;
+  --color-muted: #4A5470;
+  --color-brand: #5F87D1;
+  --color-accent: #2E55A3;
+  --color-accent-hover: #23447F;
+  --color-accent-ink: #FFFFFF;
+  --color-marker: #FFE45C;
+  --color-line: #C9D3E8;
+  --color-inverse-muted: #B8C7E6;
+  --color-focus: #101935;
+  --color-focus-dark: #FFE45C;
+
+  /* type */
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-body: "Wix Madefor Text", system-ui, sans-serif;
+  --fs-h1: clamp(1.875rem, 1.24rem + 2.7vw, 3.75rem);       /* 30 → 60 */
+  --fs-plus: clamp(1.5rem, 1.08rem + 1.8vw, 2.75rem);       /* 24 → 44 */
+  --fs-h2: clamp(1.625rem, 1.35rem + 1.2vw, 2.5rem);        /* 26 → 40 */
+  --fs-h3: clamp(1.1875rem, 1.12rem + 0.3vw, 1.375rem);     /* 19 → 22 */
+  --fs-lead: clamp(1.0625rem, 0.99rem + 0.3vw, 1.25rem);    /* 17 → 20 */
+  --fs-body: clamp(1rem, 0.98rem + 0.1vw, 1.0625rem);       /* 16 → 17 */
+  --fs-small: 0.875rem;                                     /* 14 */
+  --fs-phone: clamp(1.5rem, 9vw, 5.5rem);                   /* consult number: 35 at 390 → 88 */
+  --fs-figure: clamp(2.5rem, 1.95rem + 2.4vw, 4rem);        /* 40 → 64 (Unbounded is wide: 72 overflows a quarter column) */
+  --fs-price: clamp(1.5rem, 1.42rem + 0.35vw, 1.75rem);     /* 24 → 28 */
+  --lh-tight: 1.08;
+  --lh-head: 1.2;
+  --lh-body: 1.55;
+
+  /* space (8-based) */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2rem;
+  --s-5: 3rem;
+  --s-6: 4rem;
+  --s-7: 5rem;
+  --s-8: 8rem;
+  --space: clamp(1.25rem, 0.6rem + 2.8vw, 4rem);            /* page side: 20 → 64 */
+  --gap: clamp(1rem, 0.85rem + 0.6vw, 1.5rem);              /* 16 → 24 */
+  --block: clamp(5rem, 3.9rem + 4.6vw, 8rem);               /* 80 → 128 */
+  --inner: clamp(2rem, 1.6rem + 1.6vw, 3rem);               /* 32 → 48 */
+  --container: 1280px;
+  --header-h: 72px;
+  --tap: 44px;
+  --btn-h: 56px;
+
+  /* shape */
+  --radius: 6px;
+  --radius-0: 0;
+  --line: 1px;
+  --ring: 2px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur-press: 120ms;
+  --dur-fast: 200ms;
+  --dur-mid: 250ms;
+  --dur-word: 400ms;
+  --dur: 600ms;
+}
+@media (max-width: 1279.98px) {
+  :root { --header-h: 56px; }
+}

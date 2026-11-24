@@ -1,0 +1,60 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { contacts, scheduleShort, phones } from "../data/site";
+const service = ["Про компанію", "Статті", "Сервісні центри", "Повернення та обмін", "Договір публічної оферти"];
+---
+<footer class="ftr" id="footer">
+  <div class="container ftr__grid">
+    <div class="ftr__brand">
+      <a class="ftr__logo" href="#top">
+        <img src="img/logo.webp" width="340" height="46" alt="MEDMAG" loading="lazy" />
+        <span>Медтехніка для всієї родини</span>
+      </a>
+      <p class="ftr__addr">{contacts.street}, {contacts.metro}</p>
+      <p class="ftr__hours" data-rec="R-UX-05,SE-R004">Графік: {scheduleShort}</p>
+      <p class="ftr__phone"><a class="num" href={phones[0].href}>{phones[0].label}</a></p>
+    </div>
+    <nav class="ftr__nav" aria-label="Інформація">
+      <ul>
+        {service.map((s) => <li><FutureLink>{s}</FutureLink></li>)}
+      </ul>
+    </nav>
+    <div class="ftr__side" data-rec="R-UX-12,MA-R010,SM-R015">
+      <ul class="ftr__social" aria-label="Соцмережі">
+        <li><a class="icon-btn" href={contacts.facebook} target="_blank" rel="noopener" aria-label="Facebook"><Icon name="facebook" /></a></li>
+        <li><a class="icon-btn" href={contacts.instagram} target="_blank" rel="noopener" aria-label="Instagram"><Icon name="instagram" /></a></li>
+        <li><a class="icon-btn" href={contacts.telegram} target="_blank" rel="noopener" aria-label="Telegram"><Icon name="telegram" /></a></li>
+      </ul>
+      <p class="ftr__rating">Рейтинг зручності сторінки 4.8 із 5, 1&nbsp;982 голоси</p>
+    </div>
+  </div>
+  <div class="container ftr__base">
+    <p>© 2026 MEDMAG</p>
+  </div>
+</footer>
+
+<style>
+  .ftr { background: var(--color-bg); border-top: var(--line) solid var(--color-line); padding-block: var(--s-6) var(--s-3); font-size: var(--fs-small); color: var(--color-muted); }
+  .ftr__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 4fr); gap: var(--s-4); align-items: start; }
+  .ftr__brand { display: grid; gap: var(--s-1); justify-items: start; }
+  .ftr__logo { display: inline-flex; flex-direction: column; gap: 4px; text-decoration: none; color: var(--color-muted); margin-bottom: var(--s-1); }
+  .ftr__logo img { width: 168px; height: auto; }
+  .ftr__phone a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--color-text); font-weight: 600; text-decoration: none; font-size: var(--fs-body); }
+  .ftr__phone a:hover { text-decoration: underline; }
+  .ftr__nav ul { list-style: none; margin: 0; padding: 0; display: grid; }
+  .ftr__nav :global(.future-link) { min-height: 40px; color: var(--color-text); }
+  .ftr__side { display: grid; gap: var(--s-2); justify-items: start; }
+  .ftr__social { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s-1); }
+  .ftr__social .icon-btn { background: var(--color-surface); }
+  .ftr__base { margin-top: var(--s-5); padding-top: var(--s-2); border-top: var(--line) solid var(--color-line); }
+  @media (max-width: 1023.98px) {
+    .ftr__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .ftr__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 559.98px) {
+    .ftr { padding-bottom: calc(var(--s-3) + 72px); }
+    .ftr__grid { grid-template-columns: minmax(0, 1fr); }
+    .ftr__nav :global(.future-link) { min-height: var(--tap); }
+  }
+</style>

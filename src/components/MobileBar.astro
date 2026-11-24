@@ -1,0 +1,37 @@
+---
+// 390: sticky action bar «Подзвонити · Viber · Telegram · Каталог» (R-UX-02).
+import Icon from "./Icon.astro";
+import { mainPhone, contacts } from "../data/site";
+---
+<nav class="mbar" aria-label="Швидкі дії" data-rec="R-UX-02,GA-R005,MA-R008,SM-R015">
+  <a href={mainPhone.href}><Icon name="phone" size={22} /><span>Подзвонити</span></a>
+  <a href={contacts.viber}><Icon name="viber" size={22} /><span>Viber</span></a>
+  <a href={contacts.telegram}><Icon name="telegram" size={22} /><span>Telegram</span></a>
+  <a href="#catalog"><Icon name="catalog" size={22} /><span>Каталог</span></a>
+</nav>
+
+<script>
+  // Visible from the first screen (Viber and Telegram one tap away); slides away while the contacts block is on screen.
+  const bar = document.querySelector<HTMLElement>(".mbar");
+    const contacts = document.getElementById("contacts");
+  if (bar && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("mbar-ready");
+    let atContacts = false;
+    const sync = () => bar.classList.toggle("is-on", !atContacts);
+    sync();
+    if (contacts) new IntersectionObserver(([e]) => { atContacts = e.isIntersecting; sync(); }, { rootMargin: "0px 0px -30% 0px" }).observe(contacts);
+  }
+</script>
+
+<style>
+  .mbar { display: none; }
+  @media (max-width: 767.98px) {
+    .mbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--color-text); padding-bottom: env(safe-area-inset-bottom); transition: transform var(--dur-mid) var(--ease-out); }
+    .mbar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 60px; color: var(--color-accent-ink); text-decoration: none; font-size: 0.75rem; font-weight: 600; }
+    .mbar a:active { background: var(--color-accent-hover); }
+    .mbar a:focus-visible { outline-color: var(--color-focus-dark); outline-offset: -4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mbar { transition: none; }
+  }
+</style>

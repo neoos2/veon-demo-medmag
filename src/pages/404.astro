@@ -1,0 +1,27 @@
+---
+import "@fontsource/unbounded/600.css";
+import "@fontsource/wix-madefor-text/400.css";
+import "@fontsource/wix-madefor-text/600.css";
+import Base from "../layouts/Base.astro";
+import "../styles/site.css";
+import { mainPhone } from "../data/site";
+---
+<Base lang="uk" title="Сторінку не знайдено — MEDMAG" description="Такої сторінки немає. Поверніться на головну MEDMAG або подзвоніть нам.">
+  <section class="nf">
+    <div class="container nf__in">
+      <h1>Такої сторінки немає</h1>
+      <p class="lead">Можливо, адреса змінилася. Поверніться на головну або подзвоніть — підкажемо.</p>
+      <div class="nf__actions">
+        <a class="btn btn--ink" href="./">На головну</a>
+        <a class="btn btn--line num" href={mainPhone.href}>{mainPhone.short}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { background: var(--color-brand); min-height: 100svh; display: grid; align-items: center; padding-block: var(--s-6); }
+  .nf__in { display: grid; gap: var(--s-3); }
+  h1 { font-size: var(--fs-h1); line-height: var(--lh-tight); text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+  .nf .lead { color: var(--color-text); max-width: 36rem; }
+  .nf__actions { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+</style>

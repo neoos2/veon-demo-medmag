@@ -1,0 +1,153 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { nav, mainPhone, contacts, scheduleShort, departments } from "../data/site";
+---
+<header class="hdr" id="header">
+  <div class="hdr__in container">
+    <a class="brand" href="#top">
+      <img src="img/logo.webp" width="340" height="46" alt="MEDMAG" fetchpriority="high" />
+      <span class="brand__tag">Медтехніка для всієї родини</span>
+    </a>
+
+    <nav class="hdr__nav" aria-label="Розділи сторінки">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <FutureLink class="hdr__search future-link--below" note="Пошук з’явиться в повній версії" aria-label="Пошук товару">
+      <Icon name="search" />
+    </FutureLink>
+
+    <div class="hdr__call" data-rec="R-UX-02,GA-R005,MA-R008,SM-R015">
+      <a class="hdr__phone" href={mainPhone.href}>{mainPhone.short}</a>
+      <span class="hdr__hours">{scheduleShort}</span>
+    </div>
+
+    <div class="hdr__msg" data-rec="R-UX-02,GA-R005,MA-R008,SM-R015">
+      <a class="icon-btn" href={contacts.viber} aria-label="Написати у Viber" title="Viber"><Icon name="viber" /></a>
+      <a class="icon-btn" href={contacts.telegram} aria-label="Написати в Telegram" title="Telegram"><Icon name="telegram" /></a>
+    </div>
+
+    <div class="lang" data-rec="R-UX-01" aria-label="Мова сайту" role="group">
+      <span class="lang__cur" aria-current="true">UA</span>
+      <FutureLink class="lang__alt future-link--below" align="end" note="Російська версія у розробці">RU</FutureLink>
+    </div>
+
+    <a class="hdr__tel-m icon-btn" href={mainPhone.href} aria-label={`Подзвонити ${mainPhone.short}`} data-rec="R-UX-02,GA-R005,MA-R008,SM-R015"><Icon name="phone" /></a>
+    <button class="burger icon-btn" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Меню">
+      <Icon name="menu" class="burger__open" />
+      <Icon name="close" class="burger__close" />
+    </button>
+  </div>
+
+  <div class="mnav" id="mnav" hidden>
+    <div class="container mnav__in">
+      <nav aria-label="Розділи сторінки (меню)">
+        <ul class="mnav__anchors">
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+      <p class="mnav__title">Відділи магазину</p>
+      <ul class="mnav__deps">
+        {departments.map((d) => <li><FutureLink>{d.name}</FutureLink></li>)}
+      </ul>
+      <div class="search-field">
+        <label for="search-m">Пошук товару</label>
+        <input id="search-m" type="search" disabled placeholder="Наприклад, тонометр" aria-describedby="search-m-hint" />
+        <p id="search-m-hint" class="search-field__hint">Пошук з’явиться в повній версії</p>
+      </div>
+      <div class="mnav__foot">
+        <div class="lang lang--m" data-rec="R-UX-01" aria-label="Мова сайту" role="group">
+          <span class="lang__cur" aria-current="true">UA</span>
+          <FutureLink class="lang__alt" note="Російська версія у розробці">RU</FutureLink>
+        </div>
+        <p class="mnav__hours">{scheduleShort}</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>(".burger");
+  const panel = document.getElementById("mnav");
+  if (btn && panel) {
+    const set = (open: boolean) => {
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Закрити меню" : "Меню");
+      panel.hidden = !open;
+      document.documentElement.classList.toggle("menu-open", open);
+    };
+    btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
+    panel.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a[href^='#']")) set(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); }
+    });
+    window.matchMedia("(min-width: 1280px)").addEventListener("change", (m) => { if (m.matches) set(false); });
+  }
+</script>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--color-bg); border-bottom: var(--line) solid var(--color-line); }
+  .hdr__in { display: flex; align-items: center; gap: var(--s-3); height: var(--header-h); }
+  .brand { display: inline-flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--color-muted); flex: none; padding-block: 4px; }
+  .brand img { width: 168px; height: auto; }
+  .brand__tag { font-size: 0.75rem; line-height: 1.1; color: var(--color-muted); padding-left: 2px; }
+  .hdr__nav { margin-left: auto; }
+  .hdr__nav ul { display: flex; gap: var(--s-3); list-style: none; margin: 0; padding: 0; }
+  .hdr__nav a, .mnav__anchors a { position: relative; display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: none; font-size: 0.9375rem; font-weight: 600; color: var(--color-text); white-space: nowrap; }
+  .hdr__nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 2px; background: var(--color-accent); transform: scaleX(0); transform-origin: left; transition: transform var(--dur-fast) var(--ease-out); }
+  .hdr__nav a:hover::after, .hdr__nav a:focus-visible::after { transform: scaleX(1); }
+  .hdr__nav a:hover { color: var(--color-accent); }
+  .hdr__search { width: var(--tap); height: var(--tap); justify-content: center; border-radius: var(--radius); color: var(--color-muted); background: var(--color-surface); }
+  .hdr__search :global(.future-link__note) { white-space: nowrap; }
+  .hdr__call { display: flex; flex-direction: column; line-height: 1.15; flex: none; }
+  .hdr__phone { font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; color: var(--color-text); text-decoration: none; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; padding-block: 4px 0; }
+  .hdr__phone:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
+  .hdr__hours { font-size: 0.8125rem; color: var(--color-muted); white-space: nowrap; }
+  .hdr__msg { display: flex; gap: 4px; }
+  .lang { display: flex; align-items: center; gap: 2px; font-size: 0.875rem; font-weight: 600; }
+  .lang__cur, .lang :global(.lang__alt) { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; min-height: var(--tap); border-radius: var(--radius); }
+  .lang__cur { color: var(--color-text); box-shadow: inset 0 -3px 0 var(--color-marker); }
+  .lang :global(.lang__alt) { color: var(--color-muted); }
+  .hdr__tel-m, .burger { display: none; }
+  .burger :global(.burger__close) { display: none; }
+  .burger[aria-expanded="true"] :global(.burger__open) { display: none; }
+  .burger[aria-expanded="true"] :global(.burger__close) { display: block; }
+
+  .mnav { position: fixed; inset: var(--header-h) 0 0 0; background: var(--color-bg); overflow-y: auto; overscroll-behavior: contain; border-top: var(--line) solid var(--color-line); }
+  .mnav[hidden] { display: none; }
+  .mnav__in { padding-block: var(--s-3) var(--s-7); display: grid; gap: var(--s-3); }
+  .mnav__anchors { list-style: none; margin: 0; padding: 0; display: grid; }
+  .mnav__anchors a { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; min-height: 52px; width: 100%; border-bottom: var(--line) solid var(--color-line); }
+  .mnav__title { margin: var(--s-2) 0 0; font-size: var(--fs-small); color: var(--color-muted); }
+  .mnav__deps { list-style: none; margin: 0; padding: 0; display: grid; }
+  .mnav__deps :global(.future-link) { min-height: var(--tap); font-weight: 600; color: var(--color-text); }
+  .mnav__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+  .mnav__hours { margin: 0; font-size: var(--fs-small); color: var(--color-muted); }
+
+  @media (max-width: 1359.98px) {
+    .hdr__in { gap: var(--s-2); }
+    .hdr__nav ul { gap: var(--s-2); }
+    .brand img { width: 150px; }
+  }
+  @media (max-width: 1279.98px) {
+    .hdr__nav, .hdr__search, .hdr__msg, .hdr__in > .lang { display: none; }
+    .hdr__call { margin-left: auto; }
+    .hdr__hours { display: none; }
+    .brand { gap: 0; }
+    .brand img { width: 132px; }
+    .brand__tag { font-size: 0.6875rem; }
+    :global(.js) .burger { display: inline-flex; }
+  }
+  @media (max-width: 559.98px) {
+    .hdr__call { display: none; }
+    .hdr__tel-m { display: inline-flex; margin-left: auto; }
+  }
+  @media (max-width: 359.98px) {
+    .brand__tag { display: none; }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { clinicEquipment, contacts, clinicPhone } from "../data/site";
+---
+<Section id="clinics" class="section clinics on-dark">
+  <div class="container clinics__grid">
+    <div class="clinics__main">
+      <h2>Обладнання для медичних закладів</h2>
+      <ul class="clinics__facts">
+        <li>Безготівковий розрахунок для юридичних осіб</li>
+        <li>Офіційний представник ТМ HEACO (Велика Британія)</li>
+      </ul>
+      <div class="clinics__contact">
+        <a class="clinics__mail" href={`mailto:${contacts.email}`}>{contacts.email}</a>
+        <a class="clinics__tel num" href={clinicPhone.href}><Icon name="phone" size={20} />{clinicPhone.label}</a>
+      </div>
+    </div>
+    <div class="clinics__side">
+      <p class="clinics__label">Напрями обладнання</p>
+      <ul class="clinics__list">
+        {clinicEquipment.map((e) => <li><FutureLink>{e}</FutureLink></li>)}
+      </ul>
+      <FutureLink class="clinics__all arrow">Розділ «Медичним закладам»: 37 напрямів <Icon name="arrow" size={20} /></FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(section.clinics) { background: var(--color-accent); color: var(--color-accent-ink); }
+  .clinics__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
+  .clinics__main { grid-column: 1 / span 5; display: grid; gap: var(--s-4); }
+  .clinics__main h2 { font-size: var(--fs-h2); }
+  .clinics__facts { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: var(--s-1); font-size: var(--fs-lead); }
+  .clinics__contact { display: grid; gap: var(--s-2); justify-items: start; }
+  .clinics__mail { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2rem); color: var(--color-accent-ink); text-underline-offset: 6px; text-decoration-thickness: 2px; overflow-wrap: anywhere; }
+  .clinics__mail:hover { color: var(--color-marker); }
+  .clinics__tel { display: inline-flex; align-items: center; gap: var(--s-1); min-height: var(--tap); font-weight: 600; font-size: var(--fs-lead); color: var(--color-accent-ink); text-decoration: none; }
+  .clinics__tel:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .clinics__side { grid-column: 7 / span 6; display: grid; gap: var(--s-2); }
+  .clinics__label { font-size: var(--fs-small); font-weight: 600; }
+  .clinics__list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: var(--gap); border-top: var(--line) solid var(--color-accent-ink); padding-top: var(--s-2); }
+  .clinics__list li { break-inside: avoid; }
+  .clinics__list :global(.future-link) { display: flex; min-height: 40px; align-items: center; font-size: var(--fs-lead); }
+  .clinics__side :global(.clinics__all) { min-height: var(--tap); margin-top: var(--s-1); }
+  @media (max-width: 1023.98px) {
+    .clinics__main, .clinics__side { grid-column: 1 / -1; }
+    .clinics__side { margin-top: var(--s-4); }
+  }
+  @media (max-width: 559.98px) {
+    .clinics__list { columns: 1; }
+    .clinics__list :global(.future-link) { min-height: var(--tap); }
+  }
+</style>

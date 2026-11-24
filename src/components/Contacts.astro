@@ -1,0 +1,69 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { phones, contacts, schedule } from "../data/site";
+---
+<Section id="contacts" rec="R-UX-02,GA-R005" class="section contacts">
+  <div class="container contacts__grid">
+    <div class="contacts__place">
+      <h2>Фірмовий магазин біля метро Мінська</h2>
+      <address class="contacts__addr">
+        <span class="contacts__street">{contacts.street}</span>
+        <span class="contacts__metro">{contacts.metro}</span>
+        <span class="contacts__city">{contacts.city}</span>
+      </address>
+      <a class="btn btn--ink" href={contacts.map} target="_blank" rel="noopener"><Icon name="pin" size={20} />Відкрити на карті</a>
+    </div>
+
+    <div class="contacts__info">
+      <div class="contacts__block" data-rec="R-UX-05,SE-R004">
+        <h3 class="contacts__h">Графік роботи</h3>
+        <dl class="contacts__hours">
+          {schedule.map((s) => <div><dt>{s.days}</dt><dd class="num">{s.hours}</dd></div>)}
+        </dl>
+      </div>
+      <div class="contacts__block">
+        <h3 class="contacts__h">Телефони</h3>
+        <ul class="contacts__phones">
+          {phones.map((p) => <li><a class="num" href={p.href}>{p.label}</a></li>)}
+        </ul>
+      </div>
+      <div class="contacts__block">
+        <h3 class="contacts__h">Написати</h3>
+        <ul class="contacts__msg">
+          <li><a href={contacts.viber}><Icon name="viber" size={20} />Viber</a></li>
+          <li><a href={contacts.telegram}><Icon name="telegram" size={20} />Telegram</a></li>
+          <li><a href={`mailto:${contacts.email}`}><Icon name="mail" size={20} />{contacts.email}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(section.contacts) { background: var(--color-brand); color: var(--color-text); }
+  .contacts__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
+  .contacts__place { grid-column: 1 / span 6; display: grid; gap: var(--s-4); justify-items: start; }
+  .contacts__addr { font-style: normal; display: grid; gap: var(--s-1); }
+  .contacts__street { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.75rem, 1.3rem + 2vw, 3rem); line-height: 1.1; }
+  .contacts__metro { font-family: var(--font-display); font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem); line-height: 1.2; }
+  .contacts__city { font-size: var(--fs-lead); }
+  .contacts__info { grid-column: 8 / span 5; display: grid; gap: var(--s-4); }
+  .contacts__block { display: grid; gap: var(--s-1); border-top: var(--ring) solid var(--color-text); padding-top: var(--s-2); }
+  .contacts__h { font-family: var(--font-body); font-size: var(--fs-small); font-weight: 600; }
+  .contacts__hours { margin: 0; display: grid; gap: 4px; font-size: var(--fs-lead); }
+  .contacts__hours div { display: flex; gap: var(--s-2); }
+  .contacts__hours dt { font-weight: 600; min-width: 4.5em; }
+  .contacts__hours dd { margin: 0; }
+  .contacts__phones, .contacts__msg { list-style: none; margin: 0; padding: 0; display: grid; }
+  .contacts__phones li + li, .contacts__msg li + li { border-top: var(--line) solid var(--color-text); }
+  .contacts__phones a, .contacts__msg a { display: flex; align-items: center; gap: var(--s-1); min-height: var(--tap); color: var(--color-text); text-decoration: none; font-weight: 600; font-size: var(--fs-lead); overflow-wrap: anywhere; }
+  .contacts__phones a:hover, .contacts__msg a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 1023.98px) {
+    .contacts__place, .contacts__info { grid-column: 1 / -1; }
+    .contacts__info { margin-top: var(--s-4); }
+  }
+  @media (max-width: 559.98px) {
+    .contacts__place .btn { width: 100%; }
+  }
+</style>

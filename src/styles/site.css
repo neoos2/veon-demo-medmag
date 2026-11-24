@@ -1,0 +1,92 @@
+/* MEDMAG shared styles: typography, focus, buttons, inactive links. Values only from tokens.css. */
+html { overflow-x: clip; }
+body { overflow-x: clip; font-size: var(--fs-body); line-height: var(--lh-body); font-synthesis: none; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; }
+h2 { font-size: var(--fs-h2); line-height: var(--lh-head); letter-spacing: -0.01em; }
+h3 { font-size: var(--fs-h3); line-height: 1.25; }
+p { margin: 0; }
+.num { font-variant-numeric: lining-nums tabular-nums; }
+.container { width: min(100% - 2 * var(--space), var(--container)); }
+
+/* Focus: 2 px ring + 2 px offset; ink on light and brand fields, marker on dark and accent fields */
+html :focus-visible { outline: var(--ring) solid var(--color-focus); outline-offset: 2px; transition: none; }
+html .on-dark :focus-visible { outline-color: var(--color-focus-dark); }
+
+.section { padding-block: var(--block); }
+.section__head { display: grid; gap: var(--s-2); margin-bottom: var(--inner); max-width: 52rem; }
+.lead { font-size: var(--fs-lead); line-height: 1.5; color: var(--color-muted); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--s-1); min-height: var(--btn-h); padding: 0 var(--s-4); border-radius: var(--radius); font: 600 1.0625rem/1.2 var(--font-body); text-decoration: none; border: var(--ring) solid transparent; transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out); cursor: pointer; white-space: nowrap; }
+.btn:active { transform: scale(.98); }
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { background: var(--color-accent-hover); }
+.btn--ink { background: var(--color-text); color: var(--color-accent-ink); }
+.btn--ink:hover { background: var(--color-accent-hover); }
+.btn--line { border-color: var(--color-text); color: var(--color-text); background: transparent; }
+.btn--line:hover { background: var(--color-text); color: var(--color-accent-ink); }
+.btn--line-light { border-color: var(--color-accent-ink); color: var(--color-accent-ink); background: transparent; }
+.btn--line-light:hover { background: var(--color-accent-ink); color: var(--color-text); }
+.btn .icon { flex: none; }
+
+.icon-btn { display: inline-flex; align-items: center; justify-content: center; width: var(--tap); height: var(--tap); border-radius: var(--radius); color: var(--color-accent); background: transparent; border: 0; padding: 0; cursor: pointer; transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+.icon-btn:hover { background: var(--color-surface); color: var(--color-accent-hover); }
+
+/* Arrow link: the arrow moves 4 px on hover / focus */
+.arrow { display: inline-flex; align-items: center; gap: var(--s-1); font-weight: 600; }
+.arrow .icon { transition: transform var(--dur-fast) var(--ease-out); }
+.arrow:hover .icon, .arrow:focus-visible .icon { transform: translateX(4px); }
+
+/* Text link */
+.link { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.link:hover { color: var(--color-accent-hover); text-decoration-thickness: 2px; }
+
+/* FutureLink: looks like a link of the page, reads as «not yet» on hover / focus */
+.future-link { color: inherit; outline-offset: 2px; }
+.future-link:hover { text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.future-link__note[aria-hidden="true"] { font-family: var(--font-body); font-weight: 400; font-size: 0.8125rem; letter-spacing: 0; text-transform: none; padding: .4rem .6rem; background: var(--color-text); color: var(--color-accent-ink); border-radius: var(--radius); }
+.future-link--start .future-link__note[aria-hidden="true"], .future-link--end .future-link__note[aria-hidden="true"] { top: auto; bottom: calc(100% + 6px); z-index: 30; line-height: 1.2; }
+.future-link--start .future-link__note[aria-hidden="true"] { left: 0; transform: translateY(4px); }
+.future-link--end .future-link__note[aria-hidden="true"] { left: auto; right: 0; transform: translateY(4px); }
+.future-link--start:hover .future-link__note, .future-link--start:focus-visible .future-link__note,
+.future-link--end:hover .future-link__note, .future-link--end:focus-visible .future-link__note { transform: translateY(0); }
+.future-link--below .future-link__note[aria-hidden="true"] { top: calc(100% + 6px); bottom: auto; }
+.on-dark .future-link__note[aria-hidden="true"] { background: var(--color-accent-ink); color: var(--color-text); }
+
+/* Inactive search field (full version) */
+.search-field { display: grid; gap: var(--s-1); }
+.search-field label { font-size: var(--fs-small); font-weight: 600; }
+.search-field input:disabled { height: 48px; padding: 0 var(--s-2); font: inherit; color: var(--color-muted); background: var(--color-surface); border: var(--line) solid var(--color-muted); border-radius: var(--radius); width: 100%; cursor: not-allowed; }
+.search-field input::placeholder { color: var(--color-muted); }
+.search-field__hint { font-size: var(--fs-small); color: var(--color-muted); }
+
+
+::selection { background: var(--color-marker); color: var(--color-text); }
+html { scrollbar-color: var(--color-brand) var(--color-surface); }
+
+/* Hero showcase (signature): only the active photo is shown; without scripts the first photo stays */
+html:not(.js) .showcase__img ~ .showcase__img { display: none; }
+.js .showcase__img:not(.is-on) { opacity: 0; transform: scale(.96); }
+
+/* Sale tabs: without scripts every group is listed; with scripts the panels share one cell (height = tallest, CLS 0) */
+.tabs-ready .panels > .sale__panel { grid-area: 1 / 1; transition: opacity var(--dur-fast) var(--ease-out); }
+.js.tabs-ready .sale__panel:not(.is-on) { opacity: 0; visibility: hidden; }
+.tabs-ready .panel__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .tabs-ready .panels > .sale__panel { transition: none; }
+}
+
+/* Mobile action bar: slides in after the hero actions leave the screen */
+@media (max-width: 767.98px) {
+  .js.mbar-ready .mbar:not(.is-on) { transform: translateY(100%); visibility: hidden; transition: transform var(--dur-mid) var(--ease-out), visibility 0s linear var(--dur-mid); }
+}
+
+@media (max-width: 559.98px) {
+  .btn { padding: 0 var(--s-2); }
+}
+
+/* Touch screens: no sticky hover; the note shows only while the item has focus (tap) and hides when focus leaves */
+@media (hover: none) {
+  .future-link:hover:not(:focus) .future-link__note { opacity: 0; }
+  .future-link:focus .future-link__note { opacity: 1; transform: translateY(0); }
+}

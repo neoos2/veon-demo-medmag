@@ -1,0 +1,61 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+const terms = [
+  { fig: "0\u00A0грн", title: "Самовивіз", text: "З фірмового магазину в Києві, біля метро Мінська." },
+  { fig: "45\u00A0грн", title: "Кур’єр по Києву", text: "Додому чи в офіс." },
+  { fig: "3\u00A0000\u00A0грн", title: "Безкоштовна доставка", text: "Від цієї суми — кур’єром по Києву і Новою Поштою, крім медичних меблів." },
+  { fig: "14\u00A0днів", title: "Обмін і повернення", text: "Офіційна гарантія на товари." },
+];
+const ship = ["Нова Пошта — за тарифом перевізника", "Укрпошта", "Кур’єр по Києву", "Самовивіз з магазину"];
+const pay = ["Готівкою при отриманні", "Накладений платіж", "Переказ на картку", "Visa і MasterCard", "Безготівковий розрахунок для юросіб"];
+---
+<Section id="delivery" rec="R-UX-05,SE-R004,MA-R010" class="section delivery">
+  <div class="container">
+    <div class="section__head">
+      <h2>Доставка, оплата і гарантія</h2>
+    </div>
+    <ul class="terms">
+      {terms.map((t) => (
+        <li class="term">
+          <p class="term__fig num">{t.fig}</p>
+          <h3 class="term__title">{t.title}</h3>
+          <p class="term__text">{t.text}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="ways">
+      <div>
+        <h3 class="ways__title">Способи доставки</h3>
+        <ul class="ways__list">{ship.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      <div>
+        <h3 class="ways__title">Способи оплати</h3>
+        <ul class="ways__list">{pay.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      <FutureLink class="ways__more arrow">Усі умови доставки і повернення <Icon name="arrow" size={20} /></FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .terms { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+  .term { display: grid; gap: var(--s-1); align-content: start; padding-top: var(--s-3); border-top: var(--ring) solid var(--color-text); min-width: 0; }
+  .term__fig { font-family: var(--font-display); font-weight: 600; line-height: 1; letter-spacing: -0.02em; color: var(--color-text); white-space: nowrap; min-width: 0; font-size: clamp(2.5rem, 3.4vw, 3.25rem); }
+  .term__title { font-size: var(--fs-h3); margin-top: var(--s-2); }
+  .term__text { color: var(--color-muted); }
+  .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: var(--s-4); margin-top: var(--s-6); padding: var(--s-4); background: var(--color-surface); align-items: start; }
+  .ways__title { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; margin-bottom: var(--s-1); }
+  .ways__list { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: 4px; color: var(--color-text); }
+  .ways :global(.ways__more) { align-self: end; min-height: var(--tap); color: var(--color-accent); }
+  @media (max-width: 1023.98px) {
+    .terms { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s-5); }
+    .ways { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .ways :global(.ways__more) { grid-column: 1 / -1; }
+  }
+  @media (max-width: 559.98px) {
+    .terms { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-4); }
+    .ways { grid-template-columns: minmax(0, 1fr); padding: var(--s-3); }
+  }
+</style>

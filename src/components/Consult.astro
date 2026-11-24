@@ -1,0 +1,39 @@
+---
+import Section from "./Section.astro";
+import Icon from "./Icon.astro";
+import { mainPhone, contacts, schedule } from "../data/site";
+---
+<Section id="consult" rec="R-UX-02,GA-R005" class="section consult on-dark">
+  <div class="container consult__in">
+    <div class="consult__head">
+      <h2>Порадимо модель</h2>
+      <p class="consult__lead">Не знаєте, яку модель обрати — подзвоніть або напишіть.</p>
+    </div>
+    <a class="consult__phone num" href={mainPhone.href}>{mainPhone.short}</a>
+    <div class="consult__row">
+      <a class="btn btn--line-light" href={contacts.viber}><Icon name="viber" />Написати у Viber</a>
+      <a class="btn btn--line-light" href={contacts.telegram}><Icon name="telegram" />Написати в Telegram</a>
+      <dl class="consult__hours">
+        {schedule.map((s) => <div><dt>{s.days}</dt><dd class="num">{s.hours}</dd></div>)}
+      </dl>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(section.consult) { background: var(--color-text); color: var(--color-accent-ink); }
+  .consult__in { display: grid; gap: var(--s-4); }
+  .consult__head { display: grid; gap: var(--s-1); }
+  .consult__lead { font-size: var(--fs-lead); color: var(--color-inverse-muted); }
+  .consult__phone { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-phone); line-height: 1; letter-spacing: -0.02em; color: var(--color-accent-ink); text-decoration: none; white-space: nowrap; justify-self: start; }
+  .consult__phone:hover { color: var(--color-marker); }
+  .consult__row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+  .consult__hours { display: flex; gap: var(--s-3); margin: 0 0 0 auto; color: var(--color-inverse-muted); }
+  .consult__hours div { display: flex; gap: var(--s-1); }
+  .consult__hours dt { font-weight: 600; color: var(--color-accent-ink); }
+  .consult__hours dd { margin: 0; }
+  @media (max-width: 767.98px) {
+    .consult__row { display: grid; grid-template-columns: minmax(0, 1fr); }
+    .consult__hours { margin: var(--s-1) 0 0; flex-direction: column; gap: var(--s-1); }
+  }
+</style>

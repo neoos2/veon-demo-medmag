@@ -1,0 +1,72 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { departments } from "../data/site";
+---
+<Section id="catalog" class="section catalog">
+  <div class="container">
+    <div class="catalog__head">
+      <div class="section__head">
+        <h2>Відділи магазину</h2>
+        <p class="lead">П’ять напрямів, як у меню магазину. Оберіть розділ — або подзвоніть, і ми підкажемо, де шукати.</p>
+      </div>
+      <div class="search-field catalog__search">
+        <label for="search">Пошук товару</label>
+        <input id="search" type="search" disabled placeholder="Наприклад, тонометр" aria-describedby="search-hint" />
+        <p id="search-hint" class="search-field__hint">Пошук з’явиться в повній версії</p>
+      </div>
+    </div>
+
+    <ol class="deps">
+      {departments.map((d) => (
+        <li class="dep">
+          {d.img ? (
+            <img class="dep__img" src={d.img.src} alt={d.img.alt} width="235" height="188" loading="lazy" decoding="async" />
+          ) : (
+            <p class="dep__count"><span class="dep__count-n num">{d.total}</span> <span class="dep__count-t">напрямів обладнання</span></p>
+          )}
+          <h3 class="dep__name"><FutureLink>{d.name}</FutureLink></h3>
+          <ul class="dep__list">
+            {d.items.map((it) => <li><FutureLink>{it}</FutureLink></li>)}
+          </ul>
+          <FutureLink class="dep__all arrow">
+            {d.total > d.items.length ? `Усі ${d.total} у відділі` : "Увесь відділ"}
+            <Icon name="arrow" size={20} />
+          </FutureLink>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Section>
+
+<style>
+  .catalog__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: var(--s-4); align-items: end; margin-bottom: var(--inner); }
+  .catalog__head .section__head { margin-bottom: 0; }
+  .deps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gap); }
+  .dep { display: flex; flex-direction: column; gap: var(--s-2); padding-top: var(--s-3); border-top: var(--ring) solid var(--color-text); min-width: 0; }
+  .dep__img { width: 100%; max-width: 160px; height: auto; }
+  .dep__count { min-height: 128px; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--s-1); color: var(--color-accent); }
+  .dep__count-n { color: var(--color-text); font-family: var(--font-display); font-weight: 600; font-size: var(--fs-figure); line-height: 1; letter-spacing: -0.02em; }
+  .dep__count-t { font-size: var(--fs-small); font-weight: 600; }
+  .dep__name { font-size: var(--fs-h3); overflow-wrap: break-word; min-width: 0; }
+  .dep__name :global(.future-link) { display: inline; }
+  .dep__list { list-style: none; margin: 0; padding: 0; display: grid; }
+  .dep__list :global(.future-link) { display: flex; min-height: 36px; align-items: center; color: var(--color-text); }
+  .dep__list :global(.future-link:hover) { color: var(--color-accent); }
+  .dep :global(.dep__all) { margin-top: auto; min-height: var(--tap); color: var(--color-accent); }
+
+  @media (max-width: 1199.98px) {
+    .deps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: var(--s-5); }
+  }
+  @media (max-width: 767.98px) {
+    .catalog__head { grid-template-columns: minmax(0, 1fr); }
+    .deps { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-4); }
+    .dep { display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: var(--s-2); row-gap: var(--s-1); align-items: start; }
+    .dep__img { grid-row: 1 / span 1; width: 96px; }
+    .dep__count { min-height: 0; width: 96px; justify-content: center; }
+    .dep__name { grid-column: 2; align-self: center; }
+    .dep__list, .dep :global(.dep__all) { grid-column: 1 / -1; }
+    .dep__list :global(.future-link) { min-height: var(--tap); border-bottom: var(--line) solid var(--color-line); }
+  }
+</style>
